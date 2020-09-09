@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import UserData from "./UserData";
+import UserInfo from "./UserInfo";
 import PropTypes from "prop-types";
 class Users extends Component{
 
     render() {
         return this.props.users.map((user) =>(
-           <UserData user={user} key={user.id}/>
+           <UserInfo user={user} key={user.id} removeUser = {this.props.removeUser}/>
         ));
     }
 }
