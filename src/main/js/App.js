@@ -31,10 +31,19 @@ export class App extends Component {
             }
         ]
     }
+
+    //Deleting User
+    removeUser = (id) =>{
+        this.setState(
+            {users: [...this.state.users.filter(
+                    user => user.id !== id
+                )]}
+        );
+    }
     render() {
         return (
             <div>
-                <Users users={this.state.users}/>
+                <Users users={this.state.users} removeUser={this.removeUser}/>
             </div>
         );
     }
