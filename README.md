@@ -8,7 +8,7 @@ This is a continuation of a [Part 1](https://github.com/nyakaz73/spring-boot-rea
 
 ## Lets go
 
-Before we move on make sure you have folder structure that we ended up with on the part 1 of this series
+Before we move on make sure you have folder structure that we ended up with on the [Part 1](https://github.com/nyakaz73/spring-boot-reactjs-fullstack) of this series
 ```cmd
 - sample-project-root
     - frontend
@@ -31,10 +31,69 @@ Before we move on make sure you have folder structure that we ended up with on t
  package.json
  pom.xml
 ```
-If not make sure you follow [Part1](https://github.com/nyakaz73/spring-boot-reactjs-fullstack) of the series where we setup our **Spring Boot RESTful API Server** and configured React with **Babel and Webpack**
+If not make sure you follow [Part1](https://github.com/nyakaz73/spring-boot-reactjs-fullstack) of this series where we setup our **Spring Boot RESTful API Server** and configured React with **Babel and Webpack**
 
 
-## Lets now jump in to React js
+## 1.  House Keeping
+
+Just a quick i noticed i had forgot to configure babel in part1 of the series, If you didnt configure babel just quickly follow the following step, if you had already configured it you can skip this step:
+### 1a Babel Configuration
+Add a file name .babelrc to the root directory and configure babel:
+
+```
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": "current"
+        },
+        "useBuiltIns": "usage",
+        "corejs": 3
+      }
+    ],
+    "@babel/preset-react"
+  ],
+  "plugins": ["@babel/plugin-proposal-class-properties"]
+}
+```
+
+### 1b. main.css
+For some reason i noticed that if you put your main.css in /src/main/resources/static just like what Spring docs suggests, like we did in the last tutorial [Part 1]() , Spring wont recognise it unless you put it inside a css folder. Little weird if your ask me :)
+* So just go ahead and update that and put you main.css file in  /src/main/resources/static/css/main.css like so.
+* Remember also to update your main index.html in /src/main/resources/templates/index.html to have the correct reference of your main.css file. See code below:
+```html
+... 
+<link type="text/css" href="css/main.css" rel="stylesheet" />
+...
+```
+### 1c. React house keeping
+React puts some weird puddings and margins on your components which might not be ideal for your designs, so to fix that up just quickly add this magic code to your main.css.
+
+```css
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+```
+Make sure to restart your server to effect these changes.
+
+## 2. Lets do some React Staff Now
+
+### 2a 
+
+
+
+
+
+
+
+
+
+
+
 
 
 ### Source Code
