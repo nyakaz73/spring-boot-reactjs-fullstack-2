@@ -1,14 +1,42 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-
+import Users from '../../../frontend/src/components/Users';
 
 export class App extends Component {
+    state = {
+        users:[
+            {
+                id:1,
+                name:"John",
+                surname:"Doe",
+                email:"john@doe.com",
+                username:"johnny",
+                password:"strong-password"
+            },
+            {
+                id:2,
+                name:"Marcus",
+                surname:"Daniels",
+                email:"md@dan.com",
+                username:"marcus",
+                password:"strong-password2"
+            },
+            {
+                id:3,
+                name:"Daniel",
+                surname:"Johns",
+                email:"d@jonhs.com",
+                username:"danny",
+                password:"strong-password3"
+            }
+        ]
+    }
     render() {
         return (
             <div>
-            <h1>Welcome to React Front End Served by Spring Boot</h1>
-        </div>
-    );
+                <Users users={this.state.users}/>
+            </div>
+        );
     }
 }
 
