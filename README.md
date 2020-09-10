@@ -81,8 +81,25 @@ React puts some weird puddings and margins on your components which might not be
 Make sure to restart your server to effect these changes.
 
 ## 2. Lets do some React Staff Now
+So in this section we a re going to quickly implement a User Registration Application. This section is just as important as the reader will be able to learn 
+the basic staff that you they need to know about react. Before i waste much of your time lets just jump in :
 
-### 2a 
+### 2a Components
+So we are going to divide our UI into three components:
+* Header Section
+* RegisterUser Section , which is basically going to  have our input fields and a submit button 
+* UserInfo Section, which is going to display a list of our Registered Users
+
+See Image below to have a visual aid of what we are trying to achieve.
+
+
+
+Tasks
+
+Update PropTypes as we go
+Do step by step
+CSS main.css staff
+If there is anything you feel i should have covered or improve ,Please let me know in the comments section below.
 
 
 
