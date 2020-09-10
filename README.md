@@ -92,7 +92,7 @@ So we are going to divide our UI into three components:
 
 See Image below to have a visual aid of what we are trying to achieve.
 
-
+<img src="https://raw.githubusercontent.com/nyakaz73/spring-boot-reactjs-fullstack-2/master/image1.png?token=ACTXJ5QPYANMLXUIAKPPTB27LJNS4" width="100%" height=auto />
 
 Tasks
 
