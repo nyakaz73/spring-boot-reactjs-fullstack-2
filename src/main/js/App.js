@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import Header from '../../../frontend/src/components/layouts/Header';
-import AddUser from  '../../../frontend/src/components/AddUser';
+import RegisterUser from '../../../frontend/src/components/RegisterUser';
 import Users from '../../../frontend/src/components/Users';
 
 export class App extends Component {
@@ -46,7 +46,7 @@ export class App extends Component {
         return (
             <div className="container">
                 <Header/>
-                <AddUser/>
+                <RegisterUser/>
                 <Users users={this.state.users} removeUser={this.removeUser}/>
             </div>
         );

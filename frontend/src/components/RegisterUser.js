@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-class AddUser extends Component{
+class RegisterUser extends Component{
     render() {
         return(
             <form>
@@ -71,4 +71,4 @@ const rightInput = {
     margin:'10px 0px 0px 10px'
 }
 
-export default AddUser;
+export default RegisterUser;
