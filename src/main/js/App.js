@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
+import Header from '../../../frontend/src/components/layouts/Header';
+import AddUser from  '../../../frontend/src/components/AddUser';
 import Users from '../../../frontend/src/components/Users';
 
 export class App extends Component {
@@ -17,7 +19,7 @@ export class App extends Component {
                 id:2,
                 name:"Marcus",
                 surname:"Daniels",
-                email:"md@dan.com",
+                email:"marc@dan.com",
                 username:"marcus",
                 password:"strong-password2"
             },
@@ -25,7 +27,7 @@ export class App extends Component {
                 id:3,
                 name:"Daniel",
                 surname:"Johns",
-                email:"d@jonhs.com",
+                email:"dane@jonhs.com",
                 username:"danny",
                 password:"strong-password3"
             }
@@ -42,12 +44,16 @@ export class App extends Component {
     }
     render() {
         return (
-            <div>
+            <div className="container">
+                <Header/>
+                <AddUser/>
                 <Users users={this.state.users} removeUser={this.removeUser}/>
             </div>
         );
     }
 }
+
+
 
 export default App;
 
