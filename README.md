@@ -95,7 +95,7 @@ the basic staff that you they need to know about react. Before i waste much of y
 So we are going to divide our UI into three components:
 * Header Section
 * RegisterUser Section , which is basically going to  have our input fields and a submit button 
-* UserInfo Section, which is going to display a list of our Registered Users
+* Users Section, which is going to display a list of our Registered Users
 
 See Image below to have a visual aid of what we are trying to achieve.
 
@@ -314,9 +314,11 @@ To read more about binding you can find the information [here](https://reactjs.o
 ```
 The container class will be used in the App.js 
 
-* PropTypes allow us to define props that being expected by a Component. This is a good practice to always define your props as it gives some sense of robustness in your application.
-In this case the RegisterUser component is expecting an addUser prop function. The means that addUser function is going to be implemented at the Parent level of this component in this case the App.js component. 
-
+Install Prop-types
+```cmd
+$ npm install --save prop-types
+```
+* PropTypes provide a mechanism to allow type checking in a component. The allow us to define properties that are being passed to a  Component. This is a good practice to always define your props as it gives some sense of robustness in your application.
 
 ### 2a iii App.js
 Now i  think its time to take a look at our App.js component.
@@ -327,7 +329,6 @@ import ReactDOM from "react-dom";
 import Header from '../../../frontend/src/components/layouts/Header';
 import RegisterUser from '../../../frontend/src/components/RegisterUser';
 import Users from '../../../frontend/src/components/Users';
-import axios from "axios";
 export class App extends Component {
     constructor(props) {
         super(props);
@@ -336,34 +337,7 @@ export class App extends Component {
             ]
         }
     }
-
-    componentDidMount() {
-        axios.get('/user/all')
-            .then(response => this.setState({users:response.data}))
-    }
-
-    //Deleting User
-    removeUser = (id) =>{
-        axios.delete(`/user/${id}`)
-            .then(
-                response =>this.setState( //Updating UI
-                    {users: [...this.state.users.filter(
-                            user => user.id !== id
-                        )]}
-                )
-            );
-    }
-
-    addUser = (newUser) =>{
-        axios.post('/user/save',newUser)
-            .then(
-                (response) =>{
-                    console.log(response.data);
-                    this.setState({users:[...this.state.users,response.data]})
-                }
-            );
-    }
-
+    
     render() {
         return (
             <div className="container">
@@ -379,13 +353,60 @@ export default App;
 
 ReactDOM.render(<App />, document.querySelector("#app"));
 ```
+Now this is where all the fun staff begins. Lets break this Component from top to bottom:
+
+***Bringing in Components in render()** : First thing you have probably noticed is that we are bringing in (Header, RegisterUser and Users) components that we want to be painted on the DOM by the render function. 
+These components are the three main section components that we defined earlier on that reference image. We will implement the Users component in a bit.
+
+* **Constructor with state** - We have defined  a users array in state - this is going to be responsible for storing the state of all users that are going to be retrieved from the Backend(Spring RESTful API).
+
+* **Props**
+React has two mechanisms of dealing with props:
+* It makes use of one-directional data flow (parent-to-child components).
+* However, with a callback function, it’s possible to pass props back from a child to a parent component.
+
+* **RegisterUser prop** - The RegisterUser component has an addUser prop which is referencing to this.addUser meaning we have to implement the addUser method in the class.
+Remember when we passed the addUser prop in RegisterUser component? This where the addUser method is going to be implemented.
+So in this case the App.js is using a callback function to receive a prop that has being passed from the child-component.
+
+* **Users two props**  - Passing users state to the Users component using the users prop.
+RemoverUser prop using a call back mechanism to received prop from a child component.
 
 
 
+### 2a iv Users
+Created Users compoent in the components root folder with the following code.
 
+```js
+import React, {Component} from 'react';
+import UserInfo from "./UserInfo";
+import PropTypes from "prop-types";
+class Users extends Component{
 
-### 2a iv UserInfo 
-In the components root folder create a class based UserInfo.js component wih the following code.
+    render() {
+        return this.props.users.map((user) =>(
+           <UserInfo user={user} key={user.id} removeUser = {this.props.removeUser}/>
+        ));
+    }
+}
+
+//PropTypes
+Users.propTypes = {
+    users:PropTypes.array.isRequired
+}
+export default Users;
+```
+In this Component we want to render the list of users from the database.
+* **Accessing props** To access props passed from the Parent component App.js we use the **this.props.** keyword and map through the list of data.
+
+* **UserInfo** To keep our we are going to pass the user information down to a component called UserInfo , which we are going to create in a bit.
+
+-  Also note how we are passing a user object prop to the UserInfo component. 
+-  Notice how we are also passing a prop removeUser **callback function** from the UserInfo component up to the Parent App.js using the **this.props** keyword. We'll show you in a bit where the callback is being triggered from in our UserInfo component.
+
+* **Proptypes** - Users component has a array of users prop that was passed from the Parent App.js component.
+### 2a v UserInfo 
+Now lets create our final component  in the root component folder called UserInfo.js wih the following code.
 
 ```js
 import React, {Component} from 'react';
@@ -446,6 +467,7 @@ UserInfo.propTypes = {
 }
 export  default  UserInfo;
 ```
+This component is responsible for displaying the user information and remember it is being rendered from the Users component.
 
 
 Tasks
