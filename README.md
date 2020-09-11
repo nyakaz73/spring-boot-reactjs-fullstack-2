@@ -469,7 +469,9 @@ export  default  UserInfo;
 ```
 This component is responsible for displaying the user information and remember it is being rendered from the Users component.
 
-
+* **Material icons Imports** We are bringing in our Icons from material icons we installed earlier on
+* **Dynamic Styling** If you were wondering how you can do dynamic styling this is one of the way you can do it. Here we are styling the main div component in the render method.
+The style prop is calling the 
 Tasks
 
 Update PropTypes as we go
