@@ -375,7 +375,7 @@ RemoverUser prop using a call back mechanism to received prop from a child compo
 
 
 ### 2a iv Users
-Created Users compoent in the components root folder with the following code.
+Created Users component in the components root folder with the following code.
 
 ```js
 import React, {Component} from 'react';
@@ -472,6 +472,26 @@ This component is responsible for displaying the user information and remember i
 * **Material icons Imports** We are bringing in our Icons from material icons we installed earlier on
 * **Dynamic Styling** If you were wondering how you can do dynamic styling this is one of the way you can do it. Here we are styling the main div component in the render method.
 The style prop is calling the 
+
+
+
+## TESTING JEST
+npm add --dev jest babel-jest @babel/preset-env @babel/preset-react react-test-renderer
+
+Configure babel.config.js
+```js
+// babel.config.js
+module.exports = {
+  presets: ['@babel/preset-env', '@babel/preset-react'],
+};
+```
+
+Update package.json scripts
+```json
+"scripts": {
+    "test": "jest"
+  }
+```
 Tasks
 
 Update PropTypes as we go
