@@ -4,7 +4,8 @@
   "description": "How to create a full stack application with Spring boot and React js, with web-pack and babel",
   "main": "index.js",
   "scripts": {
-    "watch": "webpack --watch -d --output ./target/classes/static/built/bundle.js"
+    "watch": "webpack --watch -d --output ./target/classes/static/built/bundle.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -24,17 +25,20 @@
     "@babel/preset-react": "^7.10.4",
     "babel-loader": "^8.1.0",
     "css-loader": "^4.3.0",
-    "sass-loader": "^10.0.2",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12",
     "extract-text-webpack-plugin": "^3.0.2",
     "node-sass": "^4.14.1",
-    "style-loader": "^1.2.1"
+    "sass-loader": "^10.0.2",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "react-test-renderer": "^16.13.1"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "axios": "^0.20.0",
+    "babel-jest": "^26.3.0",
+    "jest": "^26.4.2",
     "lodash": "^4.17.20",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
