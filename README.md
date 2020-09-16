@@ -475,9 +475,15 @@ The style prop is calling the
 
 
 
-## TESTING JEST
-npm add --dev jest babel-jest @babel/preset-env @babel/preset-react react-test-renderer
+## TESTING JEST and React Testing Library
 
+Install Testing Library
+npm install --save-dev @testing-library/react
+
+Install Jest Test Runner
+```cmd
+npm add --dev jest babel-jest @babel/preset-env @babel/preset-react react-test-renderer
+```
 Configure babel.config.js
 ```js
 // babel.config.js
@@ -491,6 +497,16 @@ Update package.json scripts
 "scripts": {
     "test": "jest"
   }
+```
+
+To run test 
+```cmd
+$ npm test
+```
+
+To update test eg when snapshots dont match and you want to intetionally update : Run test with an update flag
+```
+$ npm test -- -u
 ```
 Tasks
 
