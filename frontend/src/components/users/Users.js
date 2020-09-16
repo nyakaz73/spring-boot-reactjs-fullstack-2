@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import UserInfo from "./UserInfo";
+import UserInfo from "../user-info/UserInfo";
 import PropTypes from "prop-types";
 class Users extends Component{
 
