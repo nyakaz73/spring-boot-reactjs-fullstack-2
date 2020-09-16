@@ -1,8 +1,8 @@
 import React, {Component, useCallback} from "react";
 import ReactDOM from "react-dom";
 import Header from '../../../frontend/src/components/layouts/Header';
-import RegisterUser from '../../../frontend/src/components/RegisterUser';
-import Users from '../../../frontend/src/components/Users';
+import RegisterUser from '../../../frontend/src/components/register-user/RegisterUser';
+import Users from '../../../frontend/src/components/users/Users';
 import axios from "axios";
 export class App extends Component {
     constructor(props) {
