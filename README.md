@@ -472,7 +472,7 @@ export  default  UserInfo;
 ```
 This component is responsible for displaying the user information and remember it is being rendered from the Users component.
 
-* **Material icons Imports** We are bringing in our Icons from material icons we installed earlier on
+* **Material icons Imports** We are bringing in our Icons from material icons we installed earlier on.
 * **Dynamic Styling** If you were wondering how you can do dynamic styling this is one of the way you can do it. Here we are styling the main div component in the render method. Here we are changing the background color based on the id of the user.If the id is odd leave the background white.
 
 * **Destructuring** This is a way of pulling out variable from a prop, this will make it easier to use the prop variables insted of using this.prop key word all the time. In this case we are pulling out id from the props. then to access it we would have to use the id variable without this.props.id.
@@ -543,7 +543,7 @@ export default App;
 ReactDOM.render(<App />, document.querySelector("#app"));
 ```
 
-First import axios a package we installed ealier which allows us to easly perfom a get,post,put,delete requests.
+First import axios a package we installed earlier which allows us to easily perform a get,post,put,delete requests.
 
 #### GET
 * **Life-cycle methods componentDidMount()** -  is invoked immediately after a component is mounted (inserted into the tree). Initialization that requires DOM nodes should go here. If you need to load data from a remote endpoint, this is a good place to instantiate the network request in this case GET operation.
@@ -569,7 +569,7 @@ The **...** spread operator copies whatever is in the users state, then we filte
 We then use the spread operator in the setState method to copy everything in the users state and then append the returned data.
 
 ## RUNNING
-To run the application make sure you backend is running by typing
+To run the application make sure your backend is running by typing the following commands in your terminal:
 
 ```cmd
 mvn spring-boot:run
