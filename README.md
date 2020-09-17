@@ -101,14 +101,14 @@ See Image below to have a visual aid of what we are trying to achieve.
 
 <img src="https://raw.githubusercontent.com/nyakaz73/spring-boot-reactjs-fullstack-2/master/image1.png?token=ACTXJ5QPYANMLXUIAKPPTB27LJNS4" width="100%" height=auto />
 
-It always good practice to divide you UI into components whenever you can as this  provides clean code that it easy to maintain. 
+Its always good practice to divide your UI into subsection-components whenever you can as this  provides clean code that it easy to maintain. 
 
-Now that you have a visual understanding if what we are trying to do , it should be easier for you to follow.
+Now that you have a visual understanding of what we are trying to do , it should now be easier for you to follow.
 Okay Lets write our first Component.
 
 ### 2a i Header
-Go to /frontend/src/components and create a folder called layout , this is where all our layouts will seat in in this case the Header.js component.
-Now create a Header.js component inside the layout folder you just create with the the following code:
+Go to /frontend/src/components and create a folder called layout , this is where all our layouts will seat, in this case the Header.js component.
+Now create a Header.js component  with the the following code:
 
 ```js
 import React from 'react';
@@ -135,15 +135,15 @@ const header = {
 export default Header;
 
 ```
-The code above show a functional component called Header. We have used a functional components over a class component because we are not dealing with life-cycle methods  in our layout component;
-Your probably have noticed that im importing an icon from material which is a third part dependency so just quickly install material core and icon as shown below:
+The code above shows a functional component called Header. We have used a functional component over a class based component because we are not dealing with life-cycle methods  in our layout;
+You probably have noticed that im importing an icon from material which is a third part dependency so just quickly install material core and icon dependencies as shown below:
 
 ```cmd
 $ npm install @material-ui/core
 $ npm install material-icons
 ```
 Now that you have installed these dependencies your code should be fine. Now we can easily bring in our <MenuIcon/> component as shown above.
-In react you can do inline styling but in this case i have chose do do it with a variable instead just to keep the code clean and readable.
+In react you can do inline styling but in this case i have chosen to do it with a variable instead just to keep the code clean and readable.
 You need to remember to always export your Component so that it will available for use in other components. If you dont you wont be able to import it in other components.
 
 You are probably wondering why your Header is not showing yet on your browser. Nothing to worry about remember our App.js file that is referenced as our entry point by webpack.config.js file, we need to bring in our components there , but for now lets just finish coding up these components first then will do that , just hang in a bit ::)
@@ -182,6 +182,7 @@ class RegisterUser extends Component{
         e.preventDefault();
         //Copying state object to newUser
         let newUser = this.state;
+        //Passing an addUser up to the parent using a callback function.
         this.props.addUser(newUser);
         //Resetting the fields
         this.setState({
@@ -276,18 +277,19 @@ RegisterUser.propTyoes = {
 
 export default RegisterUser;
 ```
-Unlike a function based component with only a return statement to render to render out jsx component , a class based component has **render** method which returns our jsx component.
+Unlike a function based component with only a return statement to render to render out jsx code to DOM , a class based component has **render** method which renders the jsx to the DOM.
 Okay so Let break this component down:
-* Your probably have noticed we have a constructor with states of our form fields. The constructor in a React component is called before the component is mounted, so this is probably the best place to place our states and everything that needs to be run before the component is rendered. React also  has multiple life cycle methods besides the constructer but they are beyond the scope of this article except for one which we shall discuss in the following section .
-To lean more of life cycle method you can find them [here](https://reactjs.org/docs/react-component.html).
+* Your probably have noticed we have a constructor with states of our form fields. The constructor in a React component is called before the component is mounted, so this is probably the best place to place our states and everything that needs to be run before the component is rendered. React also  has multiple life cycle methods besides the constructor but they are beyond the scope of this article except for one which we shall discuss in the following section .
+To lean more of life cycle methods you can find them [here](https://reactjs.org/docs/react-component.html).
 
 * React uses a concept of binding if you want to have access to the parent component. In this case the form in calling the  onSubmit method which is using **this** which (this) belongs to the parent component, hence a need for binding.
-React has many ways of binding data to the parent , In this case i have used two the ways:
+React has many ways of binding data to the parent , In this case we are going to use only two of the methods:
 1. Binding in constructor **onSubmit** method
 2. Binding using arrow functions  **onChange** method.
 The onChange method will constantly update the state of our fields as we type some staff in the field areas.
 To read more about binding you can find the information [here](https://reactjs.org/docs/faq-functions.html)
 
+* The onSubmit method is going to be implemented at the root component App.js. To pass a prop up from the child to a parent component we use a prop keyword **this.props.addUser(newUser);**, we will discuss more about passing props in a bit.
 * The button has className=btn we are going to add the style in the main.css file in the resources folder:
 
 ```css
@@ -318,7 +320,7 @@ Install Prop-types
 ```cmd
 $ npm install --save prop-types
 ```
-* PropTypes provide a mechanism to allow type checking in a component. The allow us to define properties that are being passed to a  Component. This is a good practice to always define your props as it gives some sense of robustness in your application.
+* PropTypes provide a mechanism to allow type checking in a component. This allow us to define properties that are being passed to a  Component. This is a good practice to always define your props as it gives some sense of robustness in your application.
 
 ### 2a iii App.js
 Now i  think its time to take a look at our App.js component.
@@ -369,13 +371,13 @@ React has two mechanisms of dealing with props:
 Remember when we passed the addUser prop in RegisterUser component? This where the addUser method is going to be implemented.
 So in this case the App.js is using a callback function to receive a prop that has being passed from the child-component.
 
-* **Users two props**  - Passing users state to the Users component using the users prop.
+* **Users two props**  - Passing users state to the child Users component using the users property.
 RemoverUser prop using a call back mechanism to received prop from a child component.
 
 
 
 ### 2a iv Users
-Created Users component in the components root folder with the following code.
+Now create a Users component in the components root folder with the following code.
 
 ```js
 import React, {Component} from 'react';
@@ -396,13 +398,14 @@ Users.propTypes = {
 }
 export default Users;
 ```
-In this Component we want to render the list of users from the database.
-* **Accessing props** To access props passed from the Parent component App.js we use the **this.props.** keyword and map through the list of data.
+In this Component we want to render the list of users coming from the App.js parent component.
+* **Accessing props** To access props passed from the Parent component App.js we use the **this.props.** keyword, and map function to iterate through the list of data.
 
-* **UserInfo** To keep our we are going to pass the user information down to a component called UserInfo , which we are going to create in a bit.
+* **UserInfo** To keep our code clean ,we are going to pass the user information down to a component called UserInfo , which we will create in a bit.
 
 -  Also note how we are passing a user object prop to the UserInfo component. 
 -  Notice how we are also passing a prop removeUser **callback function** from the UserInfo component up to the Parent App.js using the **this.props** keyword. We'll show you in a bit where the callback is being triggered from in our UserInfo component.
+**NB** (This might be a bit confusing but in here we are just accessing a prop that has been parsed from the child UserInfo component , and will pass that up to the parent App.js using  **this.props.removeUser** where the removeUser callback function will be implemented.)
 
 * **Proptypes** - Users component has a array of users prop that was passed from the Parent App.js component.
 ### 2a v UserInfo 
@@ -439,7 +442,7 @@ class UserInfo extends Component{
                     <p>{this.props.user.name }</p>
                 </div>
 
-                <p>{this.props.user.email}</p>
+                <p>{this.props.user.email }</p>
                 <p>{this.props.user.username}</p>
                 <div style={buttons}>
                     <IconButton color="secondary" onClick={this.props.removeUser.bind(this,id )} >
@@ -470,8 +473,12 @@ export  default  UserInfo;
 This component is responsible for displaying the user information and remember it is being rendered from the Users component.
 
 * **Material icons Imports** We are bringing in our Icons from material icons we installed earlier on
-* **Dynamic Styling** If you were wondering how you can do dynamic styling this is one of the way you can do it. Here we are styling the main div component in the render method.
-The style prop is calling the 
+* **Dynamic Styling** If you were wondering how you can do dynamic styling this is one of the way you can do it. Here we are styling the main div component in the render method. Here we are changing the background color based on the id of the user.If the id is odd leave the background white.
+
+* **Destructuring** This is a way of pulling out variable from a prop, this will make it easier to use the prop variables insted of using this.prop key word all the time. In this case we are pulling out id from the props. then to access it we would have to use the id variable without this.props.id.
+You can try to destructure the rest of the properties email,username, etc.
+
+* **Passing argument to a prop** - Onclick method is going to be implemented in a removeUser callback function in our parent component. Now to remove a specific user we need to pass a unique id in this case id. Now parsing an argument inside a prop requires us to bind the argument thus in this case implementing **this.props.removeUser.bind(this,id )**
 
 
 
