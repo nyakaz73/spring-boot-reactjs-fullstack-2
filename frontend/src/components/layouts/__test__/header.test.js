@@ -21,4 +21,5 @@ it("renders Header without crashing", ()=>{
     act(()=>{
        ReactDOM.render(<Header/>,container);
     });
+    expect(container.textContent).toBe("User Registration");
 });
