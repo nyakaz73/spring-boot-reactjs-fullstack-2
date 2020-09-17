@@ -480,9 +480,117 @@ You can try to destructure the rest of the properties email,username, etc.
 
 * **Passing argument to a prop** - Onclick method is going to be implemented in a removeUser callback function in our parent component App.js. Now to remove a specific user we need to pass a unique id in this case id. Now passing an argument inside a prop requires us to bind the argument thus in this case passing our arguments in **this.props.removeUser.bind(this,id )** binding method.
 
+### 2b CRUD OPERATIONS IN REACT (FINAL)
+Now lets finally implement our crud operations in App.js component
+
+```js
+import React, {Component, useCallback} from "react";
+import ReactDOM from "react-dom";
+import Header from '../../../frontend/src/components/layouts/Header';
+import RegisterUser from '../../../frontend/src/components/register-user/RegisterUser';
+import Users from '../../../frontend/src/components/users/Users';
+import axios from "axios";
+export class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            users:[
+            ]
+        }
+    }
+
+    componentDidMount() {
+        axios.get('/user/all')
+            .then(response => this.setState({users:response.data}))
+    }
+
+    //Deleting User
+    removeUser = (id) =>{
+        axios.delete(`/user/${id}`)
+            .then(
+                response =>this.setState( //Updating UI
+                    {users: [...this.state.users.filter(
+                            user => user.id !== id
+                        )]}
+                )
+            );
+    }
+
+    addUser = (newUser) =>{
+        axios.post('/user/save',newUser)
+            .then(
+                (response) =>{
+                    console.log(response.data);
+                    this.setState({users:[...this.state.users,response.data]})
+                }
+            );
+    }
+
+    render() {
+        return (
+            <div className="container">
+                <Header/>
+                <RegisterUser addUser={this.addUser}/>
+                <Users users={this.state.users} removeUser={this.removeUser}/>
+            </div>
+        );
+    }
+}
 
 
-## TESTING JEST and React Testing Library
+export default App;
+
+ReactDOM.render(<App />, document.querySelector("#app"));
+```
+
+First import axios a package we installed ealier which allows us to easly perfom a get,post,put,delete requests.
+
+#### GET
+* **Life-cycle methods componentDidMount()** -  is invoked immediately after a component is mounted (inserted into the tree). Initialization that requires DOM nodes should go here. If you need to load data from a remote endpoint, this is a good place to instantiate the network request in this case GET operation.
+Here we are accessing our endpoint **"/user/all"** from the Spring boot RestFul API to get a list of user in our DB. Notice how we are setting the state of the users from our response.data. So each time we say this.state.users we should be able to access the users retrieved from our endpoint.
+
+#### DELETE
+* **removeUser callback** - The remove user call back function is implemented here. In  this case we are deleting a user with that passed id from our db.
+Notice how we are updating the UI by using setState method and a spread operator inside the then callback function
+```js
+.then(
+                response =>this.setState( //Updating UI
+                    {users: [...this.state.users.filter(
+                            user => user.id !== id
+                        )]}
+                )
+            );
+
+```
+The **...** spread operator copies whatever is in the users state, then we filter all id that is not equal to the one we are deleting.
+
+#### POST
+* **addUser callback** - The post method is hitting the "/user/save" method from our Spring boot RESTful api, and then returns that user.
+We then use the spread operator in the setState method to copy everything in the users state and then append the returned data.
+
+## RUNNING
+To run the application make sure you backend is running by typing
+
+```cmd
+mvn spring-boot:run
+```
+Then to run the front end application.
+
+```cmd
+npm run-script watch
+```
+
+Then visit  http://localhost:8080/
+
+If you see this page then congratulations you have build Full Stack Application with React js **being served** by Spring boot RESTful API.
+
+
+* **NB**As you have notice if you have a bigger application with many modules it might be difficult to trace the state of your application by manually using **one directional data flow** or **callback functions** to manage your state, then implementing something like **REDUX** or **Context API** would be more ideal for state management . 
+Now i wanted to implement REDUX but i have noticed this tutorial has already been to long enough for that. So i will create a final Part 3 using REDUX.
+
+Now lets test
+
+## 3 TESTING JEST and React Testing Library
 
 ### Install Testing Library
 The React Testing Library is a very light-weight solution for testing React components. It provides light utility functions on top of react-dom and react-dom/test-utils, in a way that encourages better testing practices.
@@ -512,35 +620,360 @@ module.exports = {
     "test": "jest"
   }
 ```
+Its a good practice to create a test for every component you create.
+Now before we proceed make sure you have put your components inside folders, we want to have each component have it own folder and make sure to update your imports.
+Now inside these components folder you can create subfolder called __test__ and put your repsective test files in there.
+It not mandatory to do this but just give you project a good organised structure. You can do it either way you are comfortable with.
+In my case i now have a folder structure that looks like this:
+```cmd
+- components
+    - layouts
+        Header.js
+        - __test__
+            header.test.js
+    - register-user
+        RegisterUser.js
+        - __test__
+            register-user.test.js
+    - user-info
+        UserInfo.js
+        - __test__
+            user-info.test.js
+    - users
+        Users.js
+        - __test__
+            users.test.js
 
+```
+Now lets implement our first test
+### 3a header.test.js
 
+```js
+import React from "react";
+import ReactDOM from 'react-dom';
+import Header from '../Header';
+import {act} from "@testing-library/react";
 
-To run test 
+let container;
+
+//Context Management
+beforeEach(()=>{
+    container = document.createElement('div');
+    document.body.appendChild(container);
+});
+
+afterEach(()=>{
+    document.body.removeChild(container);
+    container = null //resetting the DOM to empty
+});
+
+it("renders Header without crashing", ()=>{
+    //Test if Component is rendering
+    act(()=>{
+       ReactDOM.render(<Header/>,container);
+    });
+    expect(container.textContent).toBe("User Registration");
+});
+```
+* **beforeEach and afterEach** - This is for context management everytime we run a test we want to be able to  setup and cleanup our DOM after every test.
+
+* **it** - The it function is the main entry point of every test in this file.
+
+* **act** - Before you make any assertions you need to first paint the DOM with the component you want to test and the act method is used to render the UI unit component.
+
+* **expect** - This will run the assertion in this query we are expecting the component to have a text "User Registration"
+Rule of thumb , always mess around with assertions to make sure you test is run as desired. eg change "User Registration" to "User Registrationmmm" and see if you test fails.
+
+### 3b register-user.test.js
+```js
+import React from "react";
+import ReactDOM from 'react-dom';
+import { unmountComponentAtNode} from 'react-dom';
+import RegisterUser from "../RegisterUser";
+import {act} from "@testing-library/react";
+
+//for Snapshot testing
+import  renderer from 'react-test-renderer';
+let container;
+
+beforeEach(()=>{
+    container = document.createElement('div')
+    document.body.appendChild(container);
+});
+
+afterEach(()=>{
+    //clean up code after exiting
+    unmountComponentAtNode(container);
+    document.body.removeChild(container);
+    container = null;
+});
+
+it('renders RegisterUser component with or without addUser function callback prop without crushing',  ()=> {
+    const addUser = jest.fn();
+    act(()=>{
+       ReactDOM.render(<RegisterUser addUser={addUser}/>,container);
+    });
+
+});
+
+it("matches snapshot with No Prop", ()=>{
+    const tree= renderer.create(<RegisterUser/>).toJSON();
+    expect(tree).toMatchSnapshot();
+
+})
+
+it("matches snapshot with Exactly one addUser callback prop", ()=>{
+    //my mock function
+    const addUser = jest.fn();
+    const tree = renderer.create(<RegisterUser addUser={addUser}/>).toJSON();
+    expect(tree).toMatchSnapshot();
+
+});
+```
+* **Mocking** - The RegisterUser takes a addUser callback prop. Jest allow us to mock the function by simulating a callback function using fn.jest() as shown above.
+* **Snapshot** -  Jest let you save “snapshots” of data with toMatchSnapshot / toMatchInlineSnapshot. With these, we can “save” the rendered component output and ensure that a change to it has to be explicitly committed as a change to the snapshot.
+Everytime you make changes to you component and you run tests there will be mismatch will allows you to verify the changes whether they will be tensional on unintentional.
+
+### 3c user-info.test.js
+
+```js
+import React from "react";
+import ReactDOM, {unmountComponentAtNode} from "react-dom";
+import UserInfo from "../UserInfo";
+import { act } from "@testing-library/react";
+import pretty from "pretty";
+//For Snapshots Tests
+import renderer from "react-test-renderer";
+let container;
+beforeEach(() => {
+  container = document.createElement("div");
+  document.body.appendChild(container);
+});
+
+afterEach(() => {
+  unmountComponentAtNode(container)
+  document.body.removeChild(container);
+  container = null;
+});
+
+//
+it("Renders User Info without crashing and Data Fetching Test", async () => {
+  const fakeUser = {
+    id: "1",
+    name: "John",
+    surname: "Marcus",
+    username: "johnny",
+    email: "john@gmail.com",
+    password: "some-strong-password",
+  };
+  /*jest.spyOn(global, "fetch").mockImplementation(() =>
+        Promise.resolve({
+            json: () => Promise.resolve(fakeUser)
+        })
+    );*/
+  // Simulate an async call
+  global.fetch = jest.fn().mockImplementation(() =>
+    Promise.resolve({
+      json: () => Promise.resolve(fakeUser),
+    })
+  );
+
+  // Use the asynchronous version of act to apply resolved promises
+
+  await act(async () => {
+    ReactDOM.render(<UserInfo user={fakeUser} />, container);
+  });
+
+  expect(container.querySelector("p").textContent).toBe(fakeUser.name);
+  expect(container.textContent).toContain(fakeUser.surname);
+  expect(container.textContent).toContain(fakeUser.username);
+  expect(container.textContent).toContain(fakeUser.email);
+
+  // remove the mock to ensure tests are completely isolated
+  global.fetch.mockClear();
+  delete global.fetch;
+});
+
+it("Snapshot Test with user Prop",  () => {
+  const fakeUser = {
+    id: "1",
+    name: "John",
+    surname: "Marcus",
+    username: "johnny",
+    email: "john@gmail.com",
+    password: "some-strong-password",
+  };
+
+  // Simulate an async call
+  global.fetch = jest.fn().mockImplementation(() =>
+    Promise.resolve({
+      json: () => Promise.resolve(fakeUser),
+    })
+  );
+
+   act( () => {
+    ReactDOM.render(<UserInfo user={fakeUser} />, container);
+  });
+  expect(container.querySelector("p").textContent).toBe(fakeUser.name);
+  expect(pretty(container.innerHTML)).toMatchInlineSnapshot(`
+    "<div style=\\"padding: 10px; border-bottom: 1px dotted #ccc; display: flex; align-items: center; justify-content: space-between; justify-items: flex-start;\\">
+      <div style=\\"display: flex; justify-content: space-between;\\"><svg class=\\"MuiSvgIcon-root\\" focusable=\\"false\\" viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\" style=\\"color: rgb(19, 138, 4); margin: 0px 10px 0px 0px;\\">
+          <path d=\\"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z\\"></path>
+        </svg>
+        <p>John</p>
+        <p>Marcus</p>
+      </div>
+      <p>john@gmail.com</p>
+      <p>johnny</p>
+      <div style=\\"display: flex;\\"><button class=\\"MuiButtonBase-root MuiIconButton-root MuiIconButton-colorSecondary\\" tabindex=\\"0\\" type=\\"button\\"><span class=\\"MuiIconButton-label\\"><svg class=\\"MuiSvgIcon-root\\" focusable=\\"false\\" viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><path d=\\"M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z\\"></path></svg></span><span class=\\"MuiTouchRipple-root\\"></span></button></div>
+    </div>"
+  `);
+
+  expect(container.textContent).toContain(fakeUser.email);
+});
+
+```
+
+* **Mocking and Fetching Data** - Jest allow us to mock a fetch Data asyn call using the mockImplementation call back which will resolve a Promise json response.
+
+* **toMatchInlineSnapshot** - We can match the rendered html to a snapshot using the pretty function . Make sure you install the pretty dependency.
+
+### 3d users.test.js
+
+```js
+import React from "react";
+import ReactDOM, { unmountComponentAtNode } from "react-dom";
+import Users from "../Users";
+import { act } from "@testing-library/react";
+import pretty from "pretty";
+
+let container;
+
+beforeEach(() => {
+  container = document.createElement("div");
+  document.body.appendChild(container);
+});
+
+afterEach(() => {
+  unmountComponentAtNode(container);
+  document.body.removeChild(container);
+  container = null;
+});
+
+it("renders Users component correctly", () => {
+  const fakeUsers = [
+    {
+      id: "1",
+      name: "John",
+      surname: "Marcus",
+      username: "johnny",
+      email: "john@gmail.com",
+      password: "some-strong-password",
+    },
+    {
+      id: "2",
+      name: "Peter",
+      surname: "Rubel",
+      username: "peter",
+      email: "peter@gmail.com",
+      password: "some-strong-password2",
+    },
+    {
+      id: "3",
+      name: "Daniel",
+      surname: "James",
+      username: "daniel",
+      email: "daniel@gmail.com",
+      password: "some-strong-password3",
+    },
+  ];
+  act(() => {
+    ReactDOM.render(<Users users={fakeUsers} />, container);
+  });
+  expect(container.textContent).toContain(fakeUsers[0].email);
+  expect(container.textContent).toContain(fakeUsers[1].email);
+  expect(container.textContent).toContain(fakeUsers[2].email);
+
+  //SNAP SHOP TEST
+  expect(pretty(container.innerHTML)).toMatchInlineSnapshot(`
+    "<div style=\\"padding: 10px; border-bottom: 1px dotted #ccc; display: flex; align-items: center; justify-content: space-between; justify-items: flex-start;\\">
+      <div style=\\"display: flex; justify-content: space-between;\\"><svg class=\\"MuiSvgIcon-root\\" focusable=\\"false\\" viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\" style=\\"color: rgb(19, 138, 4); margin: 0px 10px 0px 0px;\\">
+          <path d=\\"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z\\"></path>
+        </svg>
+        <p>John</p>
+        <p>Marcus</p>
+      </div>
+      <p>john@gmail.com</p>
+      <p>johnny</p>
+      <div style=\\"display: flex;\\"><button class=\\"MuiButtonBase-root MuiIconButton-root MuiIconButton-colorSecondary\\" tabindex=\\"0\\" type=\\"button\\"><span class=\\"MuiIconButton-label\\"><svg class=\\"MuiSvgIcon-root\\" focusable=\\"false\\" viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><path d=\\"M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z\\"></path></svg></span><span class=\\"MuiTouchRipple-root\\"></span></button></div>
+    </div>
+    <div style=\\"background-color: rgba(200, 212, 247, 0.8); padding: 10px; border-bottom: 1px dotted #ccc; display: flex; align-items: center; justify-content: space-between; justify-items: flex-start;\\">
+      <div style=\\"display: flex; justify-content: space-between;\\"><svg class=\\"MuiSvgIcon-root\\" focusable=\\"false\\" viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\" style=\\"color: rgb(19, 138, 4); margin: 0px 10px 0px 0px;\\">
+          <path d=\\"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z\\"></path>
+        </svg>
+        <p>Peter</p>
+        <p>Rubel</p>
+      </div>
+      <p>peter@gmail.com</p>
+      <p>peter</p>
+      <div style=\\"display: flex;\\"><button class=\\"MuiButtonBase-root MuiIconButton-root MuiIconButton-colorSecondary\\" tabindex=\\"0\\" type=\\"button\\"><span class=\\"MuiIconButton-label\\"><svg class=\\"MuiSvgIcon-root\\" focusable=\\"false\\" viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><path d=\\"M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z\\"></path></svg></span><span class=\\"MuiTouchRipple-root\\"></span></button></div>
+    </div>
+    <div style=\\"padding: 10px; border-bottom: 1px dotted #ccc; display: flex; align-items: center; justify-content: space-between; justify-items: flex-start;\\">
+      <div style=\\"display: flex; justify-content: space-between;\\"><svg class=\\"MuiSvgIcon-root\\" focusable=\\"false\\" viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\" style=\\"color: rgb(19, 138, 4); margin: 0px 10px 0px 0px;\\">
+          <path d=\\"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z\\"></path>
+        </svg>
+        <p>Daniel</p>
+        <p>James</p>
+      </div>
+      <p>daniel@gmail.com</p>
+      <p>daniel</p>
+      <div style=\\"display: flex;\\"><button class=\\"MuiButtonBase-root MuiIconButton-root MuiIconButton-colorSecondary\\" tabindex=\\"0\\" type=\\"button\\"><span class=\\"MuiIconButton-label\\"><svg class=\\"MuiSvgIcon-root\\" focusable=\\"false\\" viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><path d=\\"M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z\\"></path></svg></span><span class=\\"MuiTouchRipple-root\\"></span></button></div>
+    </div>"
+  `);
+});
+
+```
+The User component expects an array of users.
+
+## To run test 
 ```cmd
 $ npm test
 ```
 
-To update test eg when snapshots dont match and you want to intetionally update : Run test with an update flag
+To update test eg when snapshots dont match and you want to intentionally update : Run test with an update flag
 ```
 $ npm test -- -u
 ```
-Tasks
 
-Update PropTypes as we go
-Do step by step
-CSS main.css staff
+If you run your tests with npm test and you have an output simliar to this:
+
+```cmd
+> jest
+
+ PASS  frontend/src/components/user-info/__test__/user-info.test.js
+ PASS  frontend/src/components/layouts/__test__/header.test.js
+ PASS  frontend/src/components/users/__test__/users.test.js
+ PASS  frontend/src/components/register-user/__test__/register-user.test.js
+
+Test Suites: 4 passed, 4 total
+Tests:       7 passed, 7 total
+Snapshots:   4 passed, 4 total
+Time:        3.666 s
+Ran all test suites.
+
+```
+You have successfully wrote some unit testing using JEST test runner in React
+
+END !!
+
+
+* **NB**As you have notice if you have a bigger application with many modules it might be difficult to trace the state of your application by manually using **one directional data flow** or **callback functions** to manage your state, then implementing something like **REDUX** or **Context API** would be more ideal for state management . 
+Now i wanted to implement REDUX but i have noticed this tutorial has already been to long enough for that. So i will create a final Part 3 using REDUX.
+
+
 If there is anything you feel i should have covered or improve ,Please let me know in the comments section below.
 
-
-
-
-
-
-
-
-
-
-
+Thank you for taking your time in reading this article.
 
 
 ### Source Code
