@@ -1,6 +1,6 @@
-# Spring boot and React js fullstack application Part(2/2).
+# Spring boot and React js fullstack application Part(2/3).
 
-Full stack application part 2 with Spring boot and React js, with **REACT REDUX , JEST Test Runner**
+Full stack application Part 2 with Spring boot and React js, with **REACT REDUX , JEST Test Runner**
 
 This is a continuation of a [Part 1](https://github.com/nyakaz73/spring-boot-reactjs-fullstack) full stack application with Spring boot and React js, with **webpack** and **babel** which the git repository can be found [here](https://github.com/nyakaz73/spring-boot-reactjs-fullstack)
 
@@ -36,7 +36,7 @@ If not make sure you follow [Part1](https://github.com/nyakaz73/spring-boot-reac
 
 ## 1.  House Keeping
 
-Just a quick i noticed i had forgot to configure babel in part1 of the series, If you didnt configure babel just quickly follow the following step, if you had already configured it you can skip this step:
+Just a quick one i noticed i had forgot to configure babel in part1 of the series, If you didnt configure babel just quickly follow the following step, if you had already configured it you can skip this step:
 ### 1a Babel Configuration
 Add a file name .babelrc to the root directory and configure babel:
 
@@ -60,7 +60,7 @@ Add a file name .babelrc to the root directory and configure babel:
 ```
 
 ### 1b. main.css
-For some reason i noticed that if you put your main.css in /src/main/resources/static just like what Spring docs suggests, like we did in the last tutorial [Part 1]() , Spring wont recognise it unless you put it inside a css folder. Little weird if your ask me :)
+For some reason i noticed that if you put your main.css in /src/main/resources/static just like what Spring docs suggests, like we did in the last tutorial [Part 1]() , Spring wont recognise it unless you put it inside a css folder. Little weird if you ask me :)
 * So just go ahead and update that and put you main.css file in  /src/main/resources/static/css/main.css like so.
 * Remember also to update your main index.html in /src/main/resources/templates/index.html to have the correct reference of your main.css file. See code below:
 ```html
@@ -278,18 +278,18 @@ RegisterUser.propTyoes = {
 export default RegisterUser;
 ```
 Unlike a function based component with only a return statement to render to render out jsx code to DOM , a class based component has **render** method which renders the jsx to the DOM.
-Okay so Let break this component down:
-* Your probably have noticed we have a constructor with states of our form fields. The constructor in a React component is called before the component is mounted, so this is probably the best place to place our states and everything that needs to be run before the component is rendered. React also  has multiple life cycle methods besides the constructor but they are beyond the scope of this article except for one which we shall discuss in the following section .
+Okay so lets break this component down:
+* **Constructor** - You probably have noticed that we have a **constructor** with states of our form fields. The constructor in a React component is called before the component is mounted, so this is probably the best place to place our states and everything that needs to be run before the component is rendered. React also  has multiple life cycle methods besides the constructor but they are beyond the scope of this article except for one which we shall discuss in the following section .
 To lean more of life cycle methods you can find them [here](https://reactjs.org/docs/react-component.html).
 
-* React uses a concept of binding if you want to have access to the parent component. In this case the form in calling the  onSubmit method which is using **this** which (this) belongs to the parent component, hence a need for binding.
+* **Binding** -  React uses a concept of binding if you want to have access to the parent component. In this case the form in calling the  onSubmit method which is using **this** which (this) belongs to the parent component, hence a need for binding.
 React has many ways of binding data to the parent , In this case we are going to use only two of the methods:
 1. Binding in constructor **onSubmit** method
 2. Binding using arrow functions  **onChange** method.
 The onChange method will constantly update the state of our fields as we type some staff in the field areas.
 To read more about binding you can find the information [here](https://reactjs.org/docs/faq-functions.html)
 
-* The onSubmit method is going to be implemented at the root component App.js. To pass a prop up from the child to a parent component we use a prop keyword **this.props.addUser(newUser);**, we will discuss more about passing props in a bit.
+* **Props** - The onSubmit method is going to be implemented at the root component App.js. To pass a prop up from the child to a parent component we use a prop keyword **this.props.addUser(newUser);**, we will discuss more about passing props in a bit.
 * The button has className=btn we are going to add the style in the main.css file in the resources folder:
 
 ```css
@@ -320,7 +320,7 @@ Install Prop-types
 ```cmd
 $ npm install --save prop-types
 ```
-* PropTypes provide a mechanism to allow type checking in a component. This allow us to define properties that are being passed to a  Component. This is a good practice to always define your props as it gives some sense of robustness in your application.
+* PropTypes provide a mechanism to allow type checking in a component. This allows us to define properties that are being passed to a  Component. This is a good practice to always define your props as it gives some sense of robustness in your application.
 
 ### 2a iii App.js
 Now i  think its time to take a look at our App.js component.
@@ -355,19 +355,19 @@ export default App;
 
 ReactDOM.render(<App />, document.querySelector("#app"));
 ```
-Now this is where all the fun staff begins. Lets break this Component from top to bottom:
+Now this is where all the fun staff begins. Lets break this Component:
 
-***Bringing in Components in render()** : First thing you have probably noticed is that we are bringing in (Header, RegisterUser and Users) components that we want to be painted on the DOM by the render function. 
+* **Bringing in Components in render()** : First thing you have probably noticed is that we are bringing in (Header, RegisterUser and Users) components that we want to be painted on the DOM by the render function. 
 These components are the three main section components that we defined earlier on that reference image. We will implement the Users component in a bit.
 
 * **Constructor with state** - We have defined  a users array in state - this is going to be responsible for storing the state of all users that are going to be retrieved from the Backend(Spring RESTful API).
 
 * **Props**
 React has two mechanisms of dealing with props:
-* It makes use of one-directional data flow (parent-to-child components).
-* However, with a callback function, it’s possible to pass props back from a child to a parent component.
+ - It makes use of one-directional data flow (parent-to-child components).
+ - However, with a callback function, it’s possible to pass props back from a child to a parent component.
 
-* **RegisterUser prop** - The RegisterUser component has an addUser prop which is referencing to this.addUser meaning we have to implement the addUser method in the class.
+* **RegisterUser prop** - The RegisterUser component has an addUser prop which is referencing to **this**.addUser meaning we have to implement the addUser method in the class.
 Remember when we passed the addUser prop in RegisterUser component? This where the addUser method is going to be implemented.
 So in this case the App.js is using a callback function to receive a prop that has being passed from the child-component.
 
@@ -405,7 +405,7 @@ In this Component we want to render the list of users coming from the App.js par
 
 -  Also note how we are passing a user object prop to the UserInfo component. 
 -  Notice how we are also passing a prop removeUser **callback function** from the UserInfo component up to the Parent App.js using the **this.props** keyword. We'll show you in a bit where the callback is being triggered from in our UserInfo component.
-**NB** (This might be a bit confusing but in here we are just accessing a prop that has been parsed from the child UserInfo component , and will pass that up to the parent App.js using  **this.props.removeUser** where the removeUser callback function will be implemented.)
+* **NB** (This might be a bit confusing but in here we are just accessing a prop that has been parsed from the child UserInfo component , and will pass that up to the parent App.js using  **this.props.removeUser** where the removeUser callback function will be implemented.)
 
 * **Proptypes** - Users component has a array of users prop that was passed from the Parent App.js component.
 ### 2a v UserInfo 
