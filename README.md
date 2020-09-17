@@ -622,8 +622,8 @@ module.exports = {
 ```
 Its a good practice to create a test for every component you create.
 Now before we proceed make sure you have put your components inside folders, we want to have each component have it own folder and make sure to update your imports.
-Now inside these components folder you can create subfolder called __test__ and put your repsective test files in there.
-It not mandatory to do this but just give you project a good organised structure. You can do it either way you are comfortable with.
+Now inside these components folder you can create subfolder called __test__ and put your respective test files .
+It not mandatory to do this but it just give your project a well organised structure.
 In my case i now have a folder structure that looks like this:
 ```cmd
 - components
@@ -675,14 +675,14 @@ it("renders Header without crashing", ()=>{
     expect(container.textContent).toBe("User Registration");
 });
 ```
-* **beforeEach and afterEach** - This is for context management everytime we run a test we want to be able to  setup and cleanup our DOM after every test.
+* **beforeEach and afterEach** - This is for context management , everytime we run a test we want to be able to  setup and cleanup our DOM after every test.
 
 * **it** - The it function is the main entry point of every test in this file.
 
 * **act** - Before you make any assertions you need to first paint the DOM with the component you want to test and the act method is used to render the UI unit component.
 
 * **expect** - This will run the assertion in this query we are expecting the component to have a text "User Registration"
-Rule of thumb , always mess around with assertions to make sure you test is run as desired. eg change "User Registration" to "User Registrationmmm" and see if you test fails.
+Rule of thumb , always mess around with assertions to make sure your test is run as desired. eg change "User Registration" to "User Registrationmmm" and see if your test fails.
 
 ### 3b register-user.test.js
 ```js
@@ -730,9 +730,8 @@ it("matches snapshot with Exactly one addUser callback prop", ()=>{
 
 });
 ```
-* **Mocking** - The RegisterUser takes a addUser callback prop. Jest allow us to mock the function by simulating a callback function using fn.jest() as shown above.
+* **Mocking** - The RegisterUser takes a addUser callback prop. Jest allows us to mock the function by simulating a callback function using fn.jest() as shown above.
 * **Snapshot** -  Jest let you save “snapshots” of data with toMatchSnapshot / toMatchInlineSnapshot. With these, we can “save” the rendered component output and ensure that a change to it has to be explicitly committed as a change to the snapshot.
-Everytime you make changes to you component and you run tests there will be mismatch will allows you to verify the changes whether they will be tensional on unintentional.
 
 ### 3c user-info.test.js
 
@@ -815,26 +814,14 @@ it("Snapshot Test with user Prop",  () => {
     ReactDOM.render(<UserInfo user={fakeUser} />, container);
   });
   expect(container.querySelector("p").textContent).toBe(fakeUser.name);
-  expect(pretty(container.innerHTML)).toMatchInlineSnapshot(`
-    "<div style=\\"padding: 10px; border-bottom: 1px dotted #ccc; display: flex; align-items: center; justify-content: space-between; justify-items: flex-start;\\">
-      <div style=\\"display: flex; justify-content: space-between;\\"><svg class=\\"MuiSvgIcon-root\\" focusable=\\"false\\" viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\" style=\\"color: rgb(19, 138, 4); margin: 0px 10px 0px 0px;\\">
-          <path d=\\"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z\\"></path>
-        </svg>
-        <p>John</p>
-        <p>Marcus</p>
-      </div>
-      <p>john@gmail.com</p>
-      <p>johnny</p>
-      <div style=\\"display: flex;\\"><button class=\\"MuiButtonBase-root MuiIconButton-root MuiIconButton-colorSecondary\\" tabindex=\\"0\\" type=\\"button\\"><span class=\\"MuiIconButton-label\\"><svg class=\\"MuiSvgIcon-root\\" focusable=\\"false\\" viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><path d=\\"M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z\\"></path></svg></span><span class=\\"MuiTouchRipple-root\\"></span></button></div>
-    </div>"
-  `);
+  expect(pretty(container.innerHTML)).toMatchInlineSnapshot();
 
   expect(container.textContent).toContain(fakeUser.email);
 });
 
 ```
 
-* **Mocking and Fetching Data** - Jest allow us to mock a fetch Data asyn call using the mockImplementation call back which will resolve a Promise json response.
+* **Mocking and Fetching Data** - Jest allow us to mock a fetch Data async call using the mockImplementation call back which will resolve a Promise json response.
 
 * **toMatchInlineSnapshot** - We can match the rendered html to a snapshot using the pretty function . Make sure you install the pretty dependency.
 
@@ -895,41 +882,7 @@ it("renders Users component correctly", () => {
   expect(container.textContent).toContain(fakeUsers[2].email);
 
   //SNAP SHOP TEST
-  expect(pretty(container.innerHTML)).toMatchInlineSnapshot(`
-    "<div style=\\"padding: 10px; border-bottom: 1px dotted #ccc; display: flex; align-items: center; justify-content: space-between; justify-items: flex-start;\\">
-      <div style=\\"display: flex; justify-content: space-between;\\"><svg class=\\"MuiSvgIcon-root\\" focusable=\\"false\\" viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\" style=\\"color: rgb(19, 138, 4); margin: 0px 10px 0px 0px;\\">
-          <path d=\\"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z\\"></path>
-        </svg>
-        <p>John</p>
-        <p>Marcus</p>
-      </div>
-      <p>john@gmail.com</p>
-      <p>johnny</p>
-      <div style=\\"display: flex;\\"><button class=\\"MuiButtonBase-root MuiIconButton-root MuiIconButton-colorSecondary\\" tabindex=\\"0\\" type=\\"button\\"><span class=\\"MuiIconButton-label\\"><svg class=\\"MuiSvgIcon-root\\" focusable=\\"false\\" viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><path d=\\"M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z\\"></path></svg></span><span class=\\"MuiTouchRipple-root\\"></span></button></div>
-    </div>
-    <div style=\\"background-color: rgba(200, 212, 247, 0.8); padding: 10px; border-bottom: 1px dotted #ccc; display: flex; align-items: center; justify-content: space-between; justify-items: flex-start;\\">
-      <div style=\\"display: flex; justify-content: space-between;\\"><svg class=\\"MuiSvgIcon-root\\" focusable=\\"false\\" viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\" style=\\"color: rgb(19, 138, 4); margin: 0px 10px 0px 0px;\\">
-          <path d=\\"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z\\"></path>
-        </svg>
-        <p>Peter</p>
-        <p>Rubel</p>
-      </div>
-      <p>peter@gmail.com</p>
-      <p>peter</p>
-      <div style=\\"display: flex;\\"><button class=\\"MuiButtonBase-root MuiIconButton-root MuiIconButton-colorSecondary\\" tabindex=\\"0\\" type=\\"button\\"><span class=\\"MuiIconButton-label\\"><svg class=\\"MuiSvgIcon-root\\" focusable=\\"false\\" viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><path d=\\"M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z\\"></path></svg></span><span class=\\"MuiTouchRipple-root\\"></span></button></div>
-    </div>
-    <div style=\\"padding: 10px; border-bottom: 1px dotted #ccc; display: flex; align-items: center; justify-content: space-between; justify-items: flex-start;\\">
-      <div style=\\"display: flex; justify-content: space-between;\\"><svg class=\\"MuiSvgIcon-root\\" focusable=\\"false\\" viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\" style=\\"color: rgb(19, 138, 4); margin: 0px 10px 0px 0px;\\">
-          <path d=\\"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z\\"></path>
-        </svg>
-        <p>Daniel</p>
-        <p>James</p>
-      </div>
-      <p>daniel@gmail.com</p>
-      <p>daniel</p>
-      <div style=\\"display: flex;\\"><button class=\\"MuiButtonBase-root MuiIconButton-root MuiIconButton-colorSecondary\\" tabindex=\\"0\\" type=\\"button\\"><span class=\\"MuiIconButton-label\\"><svg class=\\"MuiSvgIcon-root\\" focusable=\\"false\\" viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><path d=\\"M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z\\"></path></svg></span><span class=\\"MuiTouchRipple-root\\"></span></button></div>
-    </div>"
-  `);
+  expect(pretty(container.innerHTML)).toMatchInlineSnapshot();
 });
 
 ```
@@ -967,16 +920,16 @@ You have successfully wrote some unit testing using JEST test runner in React
 END !!
 
 
-* **NB**As you have notice if you have a bigger application with many modules it might be difficult to trace the state of your application by manually using **one directional data flow** or **callback functions** to manage your state, then implementing something like **REDUX** or **Context API** would be more ideal for state management . 
-Now i wanted to implement REDUX but i have noticed this tutorial has already been to long enough for that. So i will create a final Part 3 using REDUX.
+* **NB** As you have noticed if you have a bigger application with many modules it might be difficult to trace the state of your application by manually using **one directional data flow** or **callback functions** to manage your state, then implementing something like **REDUX** or **Context API** would be more ideal for state management . 
+Now i wanted to implement REDUX but i have noticed this tutorial has already been to long enough. So i will create a final Part 3 using REDUX.
 
 
-If there is anything you feel i should have covered or improve ,Please let me know in the comments section below.
+* If there is anything you feel i should have covered or improve ,Please let me know in the comments section below.
 
 Thank you for taking your time in reading this article.
 
 
-### Source Code
+### Source Code Git repo
 The source code of this [Part2](https://github.com/nyakaz73/spring-boot-reactjs-fullstack-2) can be found on my git repository [here](https://github.com/nyakaz73/spring-boot-reactjs-fullstack-2)
 [Part 1](https://github.com/nyakaz73/spring-boot-reactjs-fullstack) git repo is [here](https://github.com/nyakaz73/spring-boot-reactjs-fullstack)
 
