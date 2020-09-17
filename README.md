@@ -478,20 +478,27 @@ This component is responsible for displaying the user information and remember i
 * **Destructuring** This is a way of pulling out variable from a prop, this will make it easier to use the prop variables insted of using this.prop key word all the time. In this case we are pulling out id from the props. then to access it we would have to use the id variable without this.props.id.
 You can try to destructure the rest of the properties email,username, etc.
 
-* **Passing argument to a prop** - Onclick method is going to be implemented in a removeUser callback function in our parent component. Now to remove a specific user we need to pass a unique id in this case id. Now parsing an argument inside a prop requires us to bind the argument thus in this case implementing **this.props.removeUser.bind(this,id )**
+* **Passing argument to a prop** - Onclick method is going to be implemented in a removeUser callback function in our parent component App.js. Now to remove a specific user we need to pass a unique id in this case id. Now passing an argument inside a prop requires us to bind the argument thus in this case passing our arguments in **this.props.removeUser.bind(this,id )** binding method.
 
 
 
 ## TESTING JEST and React Testing Library
 
-Install Testing Library
-npm install --save-dev @testing-library/react
+### Install Testing Library
+The React Testing Library is a very light-weight solution for testing React components. It provides light utility functions on top of react-dom and react-dom/test-utils, in a way that encourages better testing practices.
 
-Install Jest Test Runner
+```cmd
+npm install --save-dev @testing-library/react
+```
+It is not a test runner hence we need one:
+
+### Install Jest Test Runner
+Jest is a JavaScript testing framework designed to ensure correctness of any JavaScript codebase. 
+Jest is widely compatible with React projects, supporting features like, **snapshots**, mocked modules and timers, and jsdom support
 ```cmd
 npm add --dev jest babel-jest @babel/preset-env @babel/preset-react react-test-renderer
 ```
-Configure babel.config.js
+### Configure babel.config.js
 ```js
 // babel.config.js
 module.exports = {
@@ -499,12 +506,14 @@ module.exports = {
 };
 ```
 
-Update package.json scripts
+### Update package.json scripts with test runner
 ```json
 "scripts": {
     "test": "jest"
   }
 ```
+
+
 
 To run test 
 ```cmd
